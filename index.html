@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Template Example</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+	
+    body {
+      background-color: #f5f9ff;
+      font-family: Arial, sans-serif;
+    }
+
+    #markdown-content {
+      min-height: 200px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      margin: 20px auto;
+      width: 80%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Markdown Template Example</h1>
+  <div id="markdown-content"></div>
+
+  <!-- Store Markdown in a template -->
+  <template id="markdown-template">
+    # Embedded Markdown
+
+    This content is written in a `<template>` tag.
+
+    - No external file required
+    - Simple and effective
+
+    **Markdown rendering made easy!**
+  </template>
+
+  <script>
+    const markdownContent = document.getElementById('markdown-template').innerHTML;
+    document.getElementById('markdown-content').innerHTML = marked(markdownContent);
+  </script>
+</body>
+</html>
