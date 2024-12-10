@@ -42,19 +42,26 @@ Our baseline model for comparison will be a vanilla ViT model. We will compare t
 
 We train on Imagenette, a subset of ImageNet with 10 distinct classes (tench, English springer, cassette player, chain saw, church, French horn, garbage truck, gas pump, golf ball, parachute). Imagenette consists of ~13,000 images, with a 70/30 train/validation split.
 
-Images from Imagenette are loaded with their shorter dimension set to 320px. For training purposes, images are cropped, resized, and normalized to obtain square images. Following Resformer's multi-resolution training method, each training image is scaled to three different resolutions: 96px, 128px, and 160px. 
+Images from Imagenette are loaded with their shorter dimension set to 320px. For training purposes, images are cropped, resized, and normalized to obtain square images. Following Resformer's multi-resolution training method, each training image is scaled to three different resolutions: 96px, 128px, and 160px.
 
 #### 4.1.1. Data Augmentations
 
 To improve the robustness of our model, we apply a few random data augmentations:
 
 1. Random horizontal flip (p=0.5)
-2. Random rotation  (-15˚ to 15˚)
+2. Random rotation (-15˚ to 15˚)
 3. Random color jitter (brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)
 
 ### 4.2. Convolutional Patch Embeddings
 
-To achieve resolution invariance, we use convolution and adaptive pooling layers on patch embedding outputs to reduce tokens to a fixed size. The CNN patch embeddings downsample the input image to extract important local features with conv2D layers before creating patches. This is expected to perform better than vanilla ViTs, where images are directly split into patches, and feature learning does not occur until later on in the Transformer architecture. We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.
+To achieve resolution invariance, we use convolution and adaptive pooling layers on patch embedding outputs to reduce tokens to a fixed size.
+$$ y = AdaptiveAvgPool2d(ReLU(Conv2d(ReLU(Conv2d(x, w_1, b_1)), w_2, b_2)), (64, 64)) $$
+
+Our CNN patch embeddings downsample the input image to extract important local features with conv2D layers before creating patches. The downsampling block is composed of 2 conv2d layers with ReLU activations; each layer convolves a 3×3 kernel with padding to preserve the input resolution. Adaptive average pooling ensures that the patches are resized to 64×64 regardless of input size, making the model robust to different resolutions with a fixed token size. We then split the downsampled, pooled feature map into non-overlapping patches like usual.
+
+This is expected to perform better than vanilla ViTs, where images are directly split into patches, and feature learning does not occur until later on in the Transformer architecture. Our baseline vanilla and augment ViTs employ non-overlapping patch embedding, where the stride is the kernel size, making the number of input tokens $\left\lfloor{h \over h_k} \right\rfloor \times \left\lfloor{w \over w_k} \right\rfloor$.
+
+We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.
 
 ### 4.3. Positional Encodings
 
