@@ -38,15 +38,15 @@ Multi-Scale Vision Longformer[^3] details combining a multi-scale model structur
 
 Our baseline model for comparison will be a vanilla ViT model. We will compare the performance of our novel model against the baseline for the task of image classification, using the Imagenette dataset. We will follow ResFormer's training methodology to perform multi-resolution training.
 
-### Imagenette Dataset
+### 4.1. Dataset
 
-Imagenette is a subset of ImageNet data with 10 distinct classes. We train on the 320px version, with aspect ratio preserved and the shortest side resized to 320px because of Colab constraints.
+We train on Imagenette, a subset of ImageNet data with 10 distinct classes. We train on the 320px version, with aspect ratio preserved and the shortest side resized to 320px because of Colab constraints.
 
-### Convolutional Patch Embeddings
+### 4.2. Convolutional Patch Embeddings
 
 To achieve resolution invariance, we use convolution and adaptive pooling layers on patch embedding outputs to reduce tokens to a fixed size. The CNN patch embeddings downsample the input image to extract important local features with conv2D layers before creating patches. This is expected to perform better than vanilla ViTs, where images are directly split into patches, and feature learning does not occur until later on in the Transformer architecture. We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.
 
-### Positional Encodings
+### 4.3. Positional Encodings
 
 The basic transformer architecture is permutation-invariant (with the exception of masked attention); the order of the input tokens does not impact the output of self attention layers. However, token positions can be crucial for both NLP and vision tasks: for example, the position of a word can change the meaning of a sentence, and the location of a patch in an image can correlate to the object it represents.
 
@@ -54,13 +54,13 @@ Hence, we need _positional encodings_ to enable our models to learn from the pos
 
 In our models, we explore three different options for positional encodings.
 
-#### Learned Positional Encodings
+#### 4.3.1. Learned Positional Encodings
 
 Each position is mapped to a vector of parameters with the same dimension as the token embeddings, and these vectors are added to the token embeddings at each forward pass of the model. This positional encoding matrix is initialized randomly and learned by the model during training.
 
 Learned positional encodings have the advantage of being tailored to the task at hand, but suffer the drawback of only being trained on limited resolution sizes. Hence, they may not be able to generalize effectively to unseen longer resolution sizes.
 
-#### Sinusoidal Position Encodings
+#### 4.3.2. Sinusoidal Position Encodings
 
 Sinusoidal position encodings also add position encoding vectors to the token embeddings, but this vector is calculated based on a fixed sinusoidal function instead of learned during training.
 
@@ -77,7 +77,7 @@ Here, $pos$ is the position index, $i$ is the $i$-th index of positional encodin
 
 This function extends easily to unseen resolution lengths, and requires less memory and computation than learned positional encodings.
 
-#### Relative Positional Encodings
+#### 4.3.3. Relative Positional Encodings
 
 The above two methods are both examples of _absolute_ positional encodings, i.e. they encode information for the position alone. However, _relative_ positional encodings capture pairwise information between different positions.
 
@@ -93,7 +93,7 @@ $$S_{rel} = QR^\intercal$$
 
 $R$ is the relative positional encoding matrix, mapping each pair of tokens to a $dim$-length vector.
 
-### Training
+### 4.4. Training
 
 ---
 
