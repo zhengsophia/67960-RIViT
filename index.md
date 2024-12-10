@@ -128,6 +128,24 @@ For each, we train a model that uses fixed length patch embeddings and another m
 
 ## 5. Results
 
+### 5.1. Impact of Patch Embeddings
+
+| Positional Enc.    | Vanilla Patch Embed Acc | Conv. Patch Embed Acc|
+| ------------------ | ----------------------- | -------------------- |
+| Learned            | 73.55%                  | 73.54%               |
+| Sinusoidal         | 76.56%                  | 77.93%               |
+| Relative           | 77.89%                  | 80.56%               | 
+
+
+### 5.2. Evaluation on Larger Resolutions
+
+| Model              | Validation Acc          | 256px + 320px Acc    |
+| ------------------ | ----------------------- | -------------------- |
+| Vanilla ViT-CNN    |                         |                      |
+| Sinusoidal ViT-CNN |                         |                      |
+| Relative ViT-CNN   |                         |                      | 
+
+
 Relative CNN: 80.56% on validation- 80 epochs, Sinusoidal CNN: 77.93% on validation, 90 epochs (stock model size with 6 layers, 3 head, 128 neurons)
 
 Relative: 77.89% on validation ~90 epochs, Sinusoidal: 76.56% on validation, 90 epochs
