@@ -156,7 +156,7 @@ For each, we train a model that uses fixed length patch embeddings and another m
 
 ### 6.1 Resolution Invariance
 We note that there is some dropoff in accuracy on higher resolutions, but compared to vanilla patch embedded ViTs which cannot run beyond their initial max token length, we see reasonable performance after scaling resolutions.
-
+![Latent Images](images/latent_images.jpg)
 In the above figure we show images of the averaged latent spaces of the patch embedder, which shows resolution invariance across the test resolutions 96x96, 128x128, 160x160, and 320x320. As such, we conclude that ViTRI captures a CNN's ability to scale between resolutions while maintaining the benefits of a ViT.
 
 ### 6.2 Compute Costs
