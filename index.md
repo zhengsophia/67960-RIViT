@@ -139,18 +139,18 @@ For each, we train a model that uses fixed length patch embeddings and another m
 
 ### 5.2. Evaluation on Larger Resolutions
 
-| Model              | Validation Acc          | 256px + 320px Acc    |
-| ------------------ | ----------------------- | -------------------- |
-| Vanilla ViT-CNN    |                         |                      |
-| Sinusoidal ViT-CNN |                         |                      |
-| Relative ViT-CNN   |                         |                      | 
+| Model              | Val Acc       | 256px Acc  | 320px Acc  |
+| ------------------ | ------------- | ---------- | ---------- |
+| Vanilla ViT-CNN    | 73.54%        | 69.89%     | 69.73%     |
+| Sinusoidal ViT-CNN | 77.93%        | 76.17%     | 75.32%     |
+| Relative ViT-CNN   | 80.56%        | 76.52%     | 75.82%     | 
 
 
-Relative CNN: 80.56% on validation- 80 epochs, Sinusoidal CNN: 77.93% on validation, 90 epochs (stock model size with 6 layers, 3 head, 128 neurons)
+<!-- Relative CNN: 80.56% on validation- 80 epochs, Sinusoidal CNN: 77.93% on validation, 90 epochs (stock model size with 6 layers, 3 head, 128 neurons) -->
 
-Relative: 77.89% on validation ~90 epochs, Sinusoidal: 76.56% on validation, 90 epochs
+<!-- Relative: 77.89% on validation ~90 epochs, Sinusoidal: 76.56% on validation, 90 epochs -->
 
-CNN took ~30 seconds per epoch on a 3090 while non CNN took 73 seconds per epoch.
+<!-- CNN took ~30 seconds per epoch on a 3090 while non CNN took 73 seconds per epoch. -->
 
 ---
 
