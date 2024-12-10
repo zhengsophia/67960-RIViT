@@ -55,7 +55,7 @@ To improve the robustness of our model, we apply a few random data augmentations
 ### 4.2. Convolutional Patch Embeddings
 
 To achieve resolution invariance, we use convolution and adaptive pooling layers on patch embedding outputs to reduce tokens to a fixed size.
-$$ y = AdaptiveAvgPool2d(ReLU(Conv2d(ReLU(Conv2d(x, w_1, b_1)), w_2, b_2)), (64, 64)) $$
+$$ \text{y} = AdaptiveAvgPool2d(ReLU(Conv2d(ReLU(Conv2d(\text{x})))), (64, 64)) $$
 
 Our CNN patch embeddings downsample the input image to extract important local features with conv2D layers before creating patches. The downsampling block is composed of 2 conv2d layers with ReLU activations; each layer convolves a 3×3 kernel with padding to preserve the input resolution. Adaptive average pooling ensures that the patches are resized to 64×64 regardless of input size, making the model robust to different resolutions with a fixed token size. We then split the downsampled, pooled feature map into non-overlapping patches like usual.
 
@@ -65,7 +65,7 @@ We hypothesize that learnable conv2D layers will capture more localized features
 
 ### 4.3. Positional Encodings
 
-Along with the convolutional patch embeddings, we experiment with positional encodings to improve our model's resolution invariance. 
+Along with the convolutional patch embeddings, we experiment with positional encodings to improve our model's resolution invariance.
 
 The basic transformer architecture is permutation-invariant (with the exception of masked attention); the order of the input tokens does not impact the output of self attention layers. However, token positions can be crucial for both NLP and vision tasks: for example, the position of a word can change the meaning of a sentence, and the location of a patch in an image can correlate to the object it represents.
 
@@ -83,7 +83,7 @@ Learned positional encodings have the advantage of being tailored to the task at
 
 Sinusoidal position encodings also add position encoding vectors to the token embeddings, but this vector is calculated based on a fixed sinusoidal function instead of learned during training.
 
-We implement the sinusoidal encodings as follows, based on the original Transformers paper [CITE]:
+We implement the sinusoidal encodings as follows, based on the original Transformers paper [^4]:
 
 $$
 PE_{(pos, i)} = \begin{cases}
@@ -102,7 +102,7 @@ The above two methods are both examples of _absolute_ positional encodings, i.e.
 
 Not only do relative encodings introduce information about the relationships between tokens at different positions, but they can also be more generalizable to different resolutions. By nature, absolute encodings generally limit a model to some maximum token length, while pairwise relative encodings can generalize to unseen token sequence lengths.
 
-We use the relative encoding scheme originating from Shaw et al. and adapted by Huang et al. [CITE], which modifies self-attention to add a new relative component to the keys:
+We use the relative encoding scheme originating from Shaw et al. and adapted by Huang et al.[^5], which modifies self-attention to add a new relative component to the keys:
 
 $$RelativeAttention = \text{Softmax}\left(\frac{QK^\intercal + S_{rel}}{\sqrt{dim}}\right)V$$
 
@@ -130,21 +130,19 @@ For each, we train a model that uses fixed length patch embeddings and another m
 
 ### 5.1. Impact of Patch Embeddings
 
-| Positional Enc.    | Vanilla Patch Embed Acc | Conv. Patch Embed Acc|
-| ------------------ | ----------------------- | -------------------- |
-| Learned            | 73.55%                  | 73.54%               |
-| Sinusoidal         | 76.56%                  | 77.93%               |
-| Relative           | 77.89%                  | 80.56%               | 
-
+| Positional Enc. | Vanilla Patch Embed Acc | Conv. Patch Embed Acc |
+| --------------- | ----------------------- | --------------------- |
+| Learned         | 73.55%                  | 73.54%                |
+| Sinusoidal      | 76.56%                  | 77.93%                |
+| Relative        | 77.89%                  | 80.56%                |
 
 ### 5.2. Evaluation on Larger Resolutions
 
-| Model              | Val Acc       | 256px Acc  | 320px Acc  |
-| ------------------ | ------------- | ---------- | ---------- |
-| Vanilla ViT-CNN    | 73.54%        | 69.89%     | 69.73%     |
-| Sinusoidal ViT-CNN | 77.93%        | 76.17%     | 75.32%     |
-| Relative ViT-CNN   | 80.56%        | 76.52%     | 75.82%     | 
-
+| Model              | Val Acc | 256px Acc | 320px Acc |
+| ------------------ | ------- | --------- | --------- |
+| Vanilla ViT-CNN    | 73.54%  | 69.89%    | 69.73%    |
+| Sinusoidal ViT-CNN | 77.93%  | 76.17%    | 75.32%    |
+| Relative ViT-CNN   | 80.56%  | 76.52%    | 75.82%    |
 
 <!-- Relative CNN: 80.56% on validation- 80 epochs, Sinusoidal CNN: 77.93% on validation, 90 epochs (stock model size with 6 layers, 3 head, 128 neurons) -->
 
@@ -169,3 +167,11 @@ For each, we train a model that uses fixed length patch embeddings and another m
 [^3]:
     **Multi-Scale Vision Longformer: A New Vision Transformer for High-Resolution Image Encoding**
     Zhang, P., Dai, X., Yang, J., Xiao, B., Yuan, L., Zhang, L., & Gao, J., 2021. arXiv:2103.15358.
+
+[^4]:
+    **An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale**
+    Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., Uszkoreit, J., & Houlsby, N., 2020. arXiv:2010.11929.
+
+[^5]:
+    **Improve Transformer Models with Better Relative Position Embeddings**
+    Huang, Z., Liang D., Xu, P., & Xiang, B., 2020. arXiv:2009.13658.
