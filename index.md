@@ -140,9 +140,9 @@ For each, we train a model that uses fixed length patch embeddings and another m
 
 | Model              | Val Acc | 256px Acc | 320px Acc |
 | ------------------ | ------- | --------- | --------- |
-| Vanilla ViT-CNN    | 73.54%  | 69.89%    | 69.73%    |
-| Sinusoidal ViT-CNN | 77.93%  | 76.17%    | 75.32%    |
-| Relative ViT-CNN   | 80.56%  | 76.52%    | 75.82%    |
+| Vanilla ViTRI    | 73.54%  | 69.89%    | 69.73%    |
+| Sinusoidal ViTRI | 77.93%  | 76.17%    | 75.32%    |
+| Relative ViTRI   | 80.56%  | 76.52%    | 75.82%    |
 
 <!-- Relative CNN: 80.56% on validation- 80 epochs, Sinusoidal CNN: 77.93% on validation, 90 epochs (stock model size with 6 layers, 3 head, 128 neurons) -->
 
@@ -153,6 +153,20 @@ For each, we train a model that uses fixed length patch embeddings and another m
 ---
 
 ## 6. Conclusion
+
+### 6.1 Resolution Invariance
+We note that there is some dropoff in accuracy on higher resolutions, but compared to vanilla patch embedded ViTs which cannot run beyond their initial max token length, we see reasonable performance after scaling resolutions.
+
+In the above figure we show images of the averaged latent spaces of the patch embedder, which shows resolution invariance across the test resolutions 96x96, 128x128, 160x160, and 320x320. As such, we conclude that ViTRI captures a CNN's ability to scale between resolutions while maintaining the benefits of a ViT.
+
+### 6.2 Compute Costs
+While normal ViTs are unable to scale beyond their specified max token length, we are able to train normal ViTs to a max resolution of 160x160, leading to ~1600 max token lengths. ViTRI reduces all input resolutions to 256 tokens. Even with the multiple convolution operations of our patch embedder, the total training and inference time is shortened by 64.3%, and memory usage is reduced by 32.8% reduction for identical resolutions.
+
+### 6.3 ViTRI vs Vanilla Patch Embedding
+ViTRI consistently outperforms vanilla patch embedding results across the board, showing that the reduction in compute costs and token length do not cause any downsides in accuracy.
+
+### 6.4 Positional Encodings
+We see that both with and without ViTRI, relative positional encodings outperform sinusoidal encodings, which outperform learned positional encodings. This aligns with our hypothesis as relative positonal encodings capture superior contextual information, while sinusoidal encodings provide smoother inductive biases. We see for ViTRI that sinusoidal encodings lose less overall performance on larger resolutions due to better generalization on unseen data.
 
 [citations]: #
 
