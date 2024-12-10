@@ -34,13 +34,23 @@ Multi-Scale Vision Longformer[^3] details combining a multi-scale model structur
 
 ---
 
-## 4. Methods
+## 4. Methodology
 
 Our baseline model for comparison will be a vanilla ViT model. We will compare the performance of our novel model against the baseline for the task of image classification, using the Imagenette dataset. We will follow ResFormer's training methodology to perform multi-resolution training.
 
 ### 4.1. Dataset
 
-We train on Imagenette, a subset of ImageNet data with 10 distinct classes. We train on the 320px version, with aspect ratio preserved and the shortest side resized to 320px because of Colab constraints.
+We train on Imagenette, a subset of ImageNet with 10 distinct classes (tench, English springer, cassette player, chain saw, church, French horn, garbage truck, gas pump, golf ball, parachute). Imagenette consists of ~13,000 images, with a 70/30 train/validation split.
+
+Images from Imagenette are loaded with their shorter dimension set to 320px. For training purposes, images are cropped, resized, and normalized to obtain square images. Following Resformer's multi-resolution training method, each training image is scaled to three different resolutions: 96px, 128px, and 160px. 
+
+#### 4.1.1. Data Augmentations
+
+To improve the robustness of our model, we apply a few random data augmentations:
+
+1. Random horizontal flip (p=0.5)
+2. Random rotation  (-15˚ to 15˚)
+3. Random color jitter (brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)
 
 ### 4.2. Convolutional Patch Embeddings
 
