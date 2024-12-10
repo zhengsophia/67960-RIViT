@@ -66,4 +66,6 @@ CNN took ~30 seconds per epoch on a 3090 while non CNN took 73 seconds per epoch
     **ResFormer: Scaling ViTs with Multi-Resolution Training**
     Tian, R., Wu, Z., Dai, Q., Hu, H., Qiao, Y., & Jiang, Y., 2022. arXiv:2212.00776.
 
-[^3]: **Multi-Scale Vision Longformer: A New Vision Transformer for High-Resolution Image Encoding**
+[^3]:
+    **Multi-Scale Vision Longformer: A New Vision Transformer for High-Resolution Image Encoding**
+    Zhang, P., Dai, X., Yang, J., Xiao, B., Yuan, L., Zhang, L., & Gao, J., 2021. arXiv:2103.15358.
