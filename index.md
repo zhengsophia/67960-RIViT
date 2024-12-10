@@ -27,8 +27,28 @@ ViTAR[^1], or ViT with Any Resolution describes a transformer architecture that 
 Our baseline model for comparison will be a vanilla ViT model. We will compare the performance of our novel model against the baseline for the following two tasks: (i) image classification, using the ImageNet dataset, and (ii) semantic segmentation, using the ADE20K dataset.
 
 To achieve resolution invariance, we propose using convolution and adaptive pooling layers on patch embedding outputs to reduce tokens to a fixed size. We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.
-We will compare two different approaches for positional encoding: \emph{absolute} positional encoding, which encode solely as a function of patch position, versus \emph{relative} encodin, which learn relationships between distinct image patches.
+We will compare two different approaches for positional encoding: \emph{absolute} positional encoding, which encode solely as a function of patch position, versus \emph{relative} encoding, which learn relationships between distinct image patches.
 We will follow ResFormer's training methodology to perform multi-resolution training.
+
+### Positional Encodings
+
+The basic transformer architecture is permutation-invariant (with the exception of masked attention); the order of the input tokens does not impact the output of self attention layers. However, token positions can be crucial for both NLP and vision tasks: for example, the position of a word can change the meaning of a sentence, and the location of a patch in an image can correlate to the object it represents.   
+
+Hence, we need _positional encodings_ to enable our models to learn from the positions of tokens in the input. 
+
+We compare a few different options for positional encodings.
+
+#### Learned Positional Encodings
+
+Each position is mapped to a vector of parameters. This positional embedding matrix is initialized randomly and learned by the model during training.
+
+#### Sinusoidal Position Encodings
+
+
+
+#### Relative Positional Encodings
+
+
 
 ---
 
