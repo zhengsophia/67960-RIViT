@@ -36,7 +36,7 @@ Multi-Scale Vision Longformer[^3] details combining a multi-scale model structur
 
 ## 4. Methodology
 
-Our baseline model for comparison will be a vanilla ViT model. We will compare the performance of our novel model against the baseline for the task of image classification, using the Imagenette dataset. We will follow ResFormer's training methodology to perform multi-resolution training.
+Our baseline model for comparison will be a vanilla ViT model using learned positional encodings. We will compare the performance of our novel models against the baseline for the task of image classification, using the Imagenette dataset. We will follow ResFormer's training methodology to perform multi-resolution training.
 
 ### 4.1. Dataset
 
@@ -64,6 +64,8 @@ This is expected to perform better than vanilla ViTs, where images are directly 
 We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.
 
 ### 4.3. Positional Encodings
+
+Along with the convolutional patch embeddings, we experiment with positional encodings to improve our model's resolution invariance. 
 
 The basic transformer architecture is permutation-invariant (with the exception of masked attention); the order of the input tokens does not impact the output of self attention layers. However, token positions can be crucial for both NLP and vision tasks: for example, the position of a word can change the meaning of a sentence, and the location of a patch in an image can correlate to the object it represents.
 
@@ -111,6 +113,16 @@ $$S_{rel} = QR^\intercal$$
 $R$ is the relative positional encoding matrix, mapping each pair of tokens to a $dim$-length vector.
 
 ### 4.4. Training
+
+#### 4.4.1. Models
+
+Using the convolutional patch embedding and positional encodings described above, we train three types of ViTs for comparison.
+
+1. Vanilla ViT: Learned encodings.
+2. Sinusoidal ViT: Sinusoidal encodings.
+3. Relative ViT: Relative encodings.
+
+For each, we train a model that uses fixed length patch embeddings and another model that uses our convolutional patch embedding. While only the latter will be used to evaluate on larger image sizes, the non-convolutional model serves as a baseline for comparison.
 
 ---
 
