@@ -36,19 +36,21 @@ Multi-Scale Vision Longformer[^3] details combining a multi-scale model structur
 
 ## 4. Methods
 
-Our baseline model for comparison will be a vanilla ViT model. We will compare the performance of our novel model against the baseline for the task of image classification, using the ImageNette dataset.
+Our baseline model for comparison will be a vanilla ViT model. We will compare the performance of our novel model against the baseline for the task of image classification, using the Imagenette dataset. We will follow ResFormer's training methodology to perform multi-resolution training.
 
-To achieve resolution invariance, we propose using convolution and adaptive pooling layers on patch embedding outputs to reduce tokens to a fixed size. We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.
-We will compare two different approaches for positional encoding: \emph{absolute} positional encoding, which encode solely as a function of patch position, versus \emph{relative} encoding, which learn relationships between distinct image patches.
-To achieve resolution invariance, we propose using convolution on patch embedding outputs to reduce tokens to a fixed size. We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.
-We will compare two different approaches for positional encoding: _absolute_ positional encoding, which encode solely as a function of patch position, versus _relative_ encoding, which learn relationships between distinct image patches.
-We will follow ResFormer's training methodology to perform multi-resolution training.
+### Imagenette Dataset
+
+Imagenette is a subset of ImageNet data with 10 distinct classes. We train on the 320px version, with aspect ratio preserved and the shortest side resized to 320px because of Colab constraints.
+
+### Convolutional Patch Embeddings
+
+To achieve resolution invariance, we use convolution and adaptive pooling layers on patch embedding outputs to reduce tokens to a fixed size. The CNN patch embeddings downsample the input image to extract important local features with conv2D layers before creating patches. This is expected to perform better than vanilla ViTs, where images are directly split into patches, and feature learning does not occur until later on in the Transformer architecture. We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.
 
 ### Positional Encodings
 
-The basic transformer architecture is permutation-invariant (with the exception of masked attention); the order of the input tokens does not impact the output of self attention layers. However, token positions can be crucial for both NLP and vision tasks: for example, the position of a word can change the meaning of a sentence, and the location of a patch in an image can correlate to the object it represents.   
+The basic transformer architecture is permutation-invariant (with the exception of masked attention); the order of the input tokens does not impact the output of self attention layers. However, token positions can be crucial for both NLP and vision tasks: for example, the position of a word can change the meaning of a sentence, and the location of a patch in an image can correlate to the object it represents.
 
-Hence, we need _positional encodings_ to enable our models to learn from the positions of tokens in the input. The choice of positional encoding is especially important for resolution invariance; as resolutions vary, so do the number of possible positions. The positional encoding must be capable of handling different token sequence lengths. 
+Hence, we need _positional encodings_ to enable our models to learn from the positions of tokens in the input. The choice of positional encoding is especially important for resolution invariance; as resolutions vary, so do the number of possible positions. The positional encoding must be capable of handling different token sequence lengths.
 
 In our models, we explore three different options for positional encodings.
 
@@ -60,22 +62,24 @@ Learned positional encodings have the advantage of being tailored to the task at
 
 #### Sinusoidal Position Encodings
 
-Sinusoidal position encodings also adds position encoding vectors to the token embeddings, but this vector is calculated based on a fixed sinusoidal function instead of learned during training.
+Sinusoidal position encodings also add position encoding vectors to the token embeddings, but this vector is calculated based on a fixed sinusoidal function instead of learned during training.
 
 We implement the sinusoidal encodings as follows, based on the original Transformers paper [CITE]:
 
-$$PE_{(pos, i)} = \begin{cases}
+$$
+PE_{(pos, i)} = \begin{cases}
     \sin\left(\frac{pos}{10,000^{i/dim}}\right) & \text{for $i$ even} \\
     \cos\left(\frac{pos}{10,000^{i/dim}}\right) & \text{for $i$ odd}
-\end{cases}$$
+\end{cases}
+$$
 
 Here, $pos$ is the position index, $i$ is the $i$-th index of positional encoding for $pos$, and $dim$ is the dimension of the token embeddings.
 
-This function extends easily to unseen resolution lengths, and requires less memory and computation than learned positional encodings. 
+This function extends easily to unseen resolution lengths, and requires less memory and computation than learned positional encodings.
 
 #### Relative Positional Encodings
 
-The above two methods are both examples of _absolute_ positional encodings, i.e. they encode information for the position alone. However, _relative_ positional encodings capture pairwise information between different positions. 
+The above two methods are both examples of _absolute_ positional encodings, i.e. they encode information for the position alone. However, _relative_ positional encodings capture pairwise information between different positions.
 
 Not only do relative encodings introduce information about the relationships between tokens at different positions, but they can also be more generalizable to different resolutions. By nature, absolute encodings generally limit a model to some maximum token length, while pairwise relative encodings can generalize to unseen token sequence lengths.
 
@@ -88,6 +92,8 @@ $Q$, $K$, $V$ refer to the typical attention query, key, and value matrices. $S_
 $$S_{rel} = QR^\intercal$$
 
 $R$ is the relative positional encoding matrix, mapping each pair of tokens to a $dim$-length vector.
+
+### Training
 
 ---
 
