@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-        <title>index</title>
+        <title>RIViT</title>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <style>/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
             html {
@@ -6762,7 +6762,7 @@
 
 <p>In applications like Natural Language Processing, transformers have quickly become dominant models because of their scalibility and ability to capture long-range dependencies. Vision Transformers (ViTs) adapt the transformer architecture from text to image data. While ViTs perform effectively with large datasets, they still struggle in performance compared to existing convolutional neural network (CNN) models, especially in smaller datasets.</p>
 
-<p>In particular, CNNs outperform ViTs in generalizing across different image resolutions. Our project is interested in improving current ViT architecture by building <strong>resolution invariant ViTs</strong>. Objects naturally appear at different sizes and image resolution. Improving scale invariance in ViTs poses benefits to fields like healthcare, autonomous systems, and urban planning where tasks like image classification and semantic segmentation help with object recognition in medical scans and satellite images.</p>
+<p>In particular, CNNs outperform ViTs in generalizing across different image resolutions. Our project is interested in improving current ViT architecture by building <strong>resolution invariant ViTs</strong>. Objects naturally appear at different sizes and image resolution. Improving resolution invariance in ViTs poses benefits to fields like healthcare, autonomous systems, and urban planning, where tasks like image classification and semantic segmentation help with object recognition in medical scans and satellite images, input images that often cover a diverse range of sizes.</p>
 
 <p>We focus on two areas of improvement: <em>standardizing patch embedding lengths across different resolutions</em> and <em>experimenting with positional encodings to combat spatial locality</em>.</p>
 
@@ -6981,6 +6981,15 @@ In the above figure we show images of the averaged latent spaces of the patch em
 
 <p>We see that both with and without RIViT, relative positional encodings outperform sinusoidal encodings, which outperform learned positional encodings. This aligns with our hypothesis as relative positonal encodings capture superior contextual information, while sinusoidal encodings provide smoother inductive biases. We see for RIViT that sinusoidal encodings lose less overall performance on larger resolutions due to better generalization on unseen data.</p>
 
+<h3>6.5 Future Work</h3>
+
+<p>In the future, we hope to explore training and testing on larger models as well as larger datasets. Because of Colab, this project was scoped to the Imagenette dataset which is only subset of the full ImageNet dataset. Larger models and datasets will produce more robustness and generalizability. We would also like to test on higher resolutions, such as 512px and 1024px to continue pushing the resolution invariant cabilities of the augmentations.</p>
+
+<p>Beyond classification, semantic segmentation, object detection, multi-modal learning, and more provide rich applications to test the model's success in other computer vision tasks.</p>
+
+<hr />
+
+<h2>Citations</h2>
 <div class="footnotes" role="doc-endnotes">
   <ol>
     <li id="fn:1" role="doc-endnote">
