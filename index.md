@@ -1,4 +1,4 @@
-# Resolution Invariant Vision Transformers
+# RIViT: Resolution Invariant Vision Transformers 🔩
 
 _6.7960 Final Project_
 
@@ -116,17 +116,18 @@ $R$ is the relative positional encoding matrix, mapping each pair of tokens to a
 
 #### 4.4.1. Models
 
+![RIViT Architecture](images/RIViT.png "Model Architecture")
+
 Using the convolutional patch embedding and positional encodings described above, we train three types of ViTs for comparison.
 
 1. Vanilla ViT: Learned encodings.
 2. Sinusoidal ViT: Sinusoidal encodings.
 3. Relative ViT: Relative encodings.
 
-For each, we train a model that uses standard fixed length patch embeddings (ViT) and our model that uses convolutional patch embedding (ViTRI). While only the latter will be used to evaluate on larger image sizes, the non-convolutional model serves as a baseline for comparison.
+For each, we train a model that uses standard fixed length patch embeddings (ViT) and our model that uses convolutional patch embedding (RIViT). While only the latter will be used to evaluate on larger image sizes, the non-convolutional model serves as a baseline for comparison.
 
-
-The training curves for Relative ViTRI are shown below; we see that the model tends to overfit on training data, leading to an increasing gap between training and validation performance. 
-![Relative ViTRI Curves](images/relative_curves.png)
+The training curves for Relative RIViT are shown below; we see that the model tends to overfit on training data, leading to an increasing gap between training and validation performance.
+![Relative RIViT Curves](images/relative_curves.png)
 
 ---
 
@@ -140,13 +141,17 @@ The training curves for Relative ViTRI are shown below; we see that the model te
 | Sinusoidal      | 76.56%                  | 77.93%                |
 | Relative        | 77.89%                  | 80.56%                |
 
+When comparing with the vanilla ViT patch embedding, our model augmentation of convolutional patch embedding outperforms across all positional encodings. While there is insignificant difference in the validation accuracy of the learned positional encodings, our model is more computationally efficient. Because of Colab constraints, the vanilla model could only be run with a batch size of 32 at 8 minute epochs. With our convolutional patch embedding, the model ran with a batch size of 64 at 2.5 minute epochs.
+
 ### 5.2. Evaluation on Larger Resolutions
 
-| Model              | Val Acc | 256px Acc | 320px Acc |
-| ------------------ | ------- | --------- | --------- |
-| Vanilla ViTRI    | 73.54%  | 69.89%    | 69.73%    |
-| Sinusoidal ViTRI | 78.01%  | 74.90%    | 73.86%    |
-| Relative ViTRI   | 80.56%  | 76.52%    | 75.82%    |
+| Model            | Val Acc | 256px Acc | 320px Acc |
+| ---------------- | ------- | --------- | --------- |
+| Vanilla RIViT    | 73.54%  | 69.89%    | 69.73%    |
+| Sinusoidal RIViT | 78.01%  | 74.90%    | 73.86%    |
+| Relative RIViT   | 80.56%  | 76.52%    | 75.82%    |
+
+When testing on larger resolutions, sinusoidal and relative RIViT outperform vanilla RIViT in classification. Similar test accuracies on higher resolutions of 256px and 320px support that our architecture augmentations produce a more resolution invariant model.
 
 <!-- Relative CNN: 80.56% on validation- 80 epochs, Sinusoidal CNN: 77.93% on validation, 90 epochs (stock model size with 6 layers, 3 head, 128 neurons) -->
 
@@ -159,18 +164,22 @@ The training curves for Relative ViTRI are shown below; we see that the model te
 ## 6. Conclusion
 
 ### 6.1 Resolution Invariance
+
 We note that there is some dropoff in accuracy on higher resolutions, but compared to vanilla patch embedded ViTs which cannot run beyond their initial max token length, we see reasonable performance after scaling resolutions.
 ![Latent Images](images/latent_images.jpg)
-In the above figure we show images of the averaged latent spaces of the patch embedder, which shows resolution invariance across the test resolutions 96x96, 128x128, 160x160, and 320x320. As such, we conclude that ViTRI captures a CNN's ability to scale between resolutions while maintaining the benefits of a ViT.
+In the above figure we show images of the averaged latent spaces of the patch embedder, which shows resolution invariance across the test resolutions 96x96, 128x128, 160x160, and 320x320. As such, we conclude that RIViT captures a CNN's ability to scale between resolutions while maintaining the benefits of a ViT.
 
 ### 6.2 Compute Costs
-While normal ViTs are unable to scale beyond their specified max token length, we are able to train normal ViTs to a max resolution of 160x160, leading to ~1600 max token lengths. ViTRI reduces all input resolutions to 256 tokens. Even with the multiple convolution operations of our patch embedder, the total training and inference time is shortened by 64.3%, and memory usage is reduced by 32.8% reduction for identical resolutions.
 
-### 6.3 ViTRI vs Vanilla Patch Embedding
-ViTRI consistently outperforms vanilla patch embedding results across the board, showing that the reduction in compute costs and token length do not cause any downsides in accuracy.
+While normal ViTs are unable to scale beyond their specified max token length, we are able to train normal ViTs to a max resolution of 160x160, leading to ~1600 max token lengths. RIViT reduces all input resolutions to 256 tokens. Even with the multiple convolution operations of our patch embedder, the total training and inference time is shortened by 64.3%, and memory usage is reduced by 32.8% reduction for identical resolutions.
+
+### 6.3 RIViT vs Vanilla Patch Embedding
+
+RIViT consistently outperforms vanilla patch embedding results across the board, showing that the reduction in compute costs and token length do not cause any downsides in accuracy.
 
 ### 6.4 Positional Encodings
-We see that both with and without ViTRI, relative positional encodings outperform sinusoidal encodings, which outperform learned positional encodings. This aligns with our hypothesis as relative positonal encodings capture superior contextual information, while sinusoidal encodings provide smoother inductive biases. We see for ViTRI that sinusoidal encodings lose less overall performance on larger resolutions due to better generalization on unseen data.
+
+We see that both with and without RIViT, relative positional encodings outperform sinusoidal encodings, which outperform learned positional encodings. This aligns with our hypothesis as relative positonal encodings capture superior contextual information, while sinusoidal encodings provide smoother inductive biases. We see for RIViT that sinusoidal encodings lose less overall performance on larger resolutions due to better generalization on unseen data.
 
 [citations]: #
 
