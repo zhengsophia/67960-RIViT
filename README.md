@@ -1,4 +1,4 @@
-# 🐸 RIViT: Resolution Invariant Vision Transformers
+# 🐸 RIViT: Resolution Invariant Vision Transformer
 
 _6.7960 Deep Learning FA24_
 
