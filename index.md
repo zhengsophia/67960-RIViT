@@ -153,12 +153,6 @@ When comparing with the vanilla ViT patch embedding, our model augmentation of c
 
 When testing on larger resolutions, sinusoidal and relative RIViT outperform vanilla RIViT in classification. Similar test accuracies on higher resolutions of 256px and 320px support that our architecture augmentations produce a more resolution invariant model.
 
-<!-- Relative CNN: 80.56% on validation- 80 epochs, Sinusoidal CNN: 77.93% on validation, 90 epochs (stock model size with 6 layers, 3 head, 128 neurons) -->
-
-<!-- Relative: 77.89% on validation ~90 epochs, Sinusoidal: 76.56% on validation, 90 epochs -->
-
-<!-- CNN took ~30 seconds per epoch on a 3090 while non CNN took 73 seconds per epoch. -->
-
 ---
 
 ## 6. Conclusion
