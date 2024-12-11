@@ -102,7 +102,7 @@ The above two methods are both examples of _absolute_ positional encodings, i.e.
 
 Not only do relative encodings introduce information about the relationships between tokens at different positions, but they can also be more generalizable to different resolutions. By nature, absolute encodings generally limit a model to some maximum token length, while pairwise relative encodings can generalize to unseen token sequence lengths.
 
-We use the relative encoding scheme originating from Shaw et al. and adapted by Huang et al.[^5], which modifies self-attention to add a new relative component to the keys:
+We use the relative encoding scheme originating from Shaw et al. [^6] and adapted by Huang et al.[^5], which modifies self-attention to add a new relative component to the keys:
 
 $$RelativeAttention = \text{Softmax}\left(\frac{QK^\intercal + S_{rel}}{\sqrt{dim}}\right)V$$
 
@@ -192,4 +192,9 @@ We see that both with and without ViTRI, relative positional encodings outperfor
 
 [^5]:
     **Improve Transformer Models with Better Relative Position Embeddings**
-    Huang, Z., Liang D., Xu, P., & Xiang, B., 2020. arXiv:2009.13658.
+    Huang, Z., Liang, D., Xu, P., & Xiang, B., 2020. arXiv:2009.13658.
+
+[^6]:
+    **Self-Attention with Relative Position Representations**
+    Shaw, P., Uszkoreit, J., & Vaswani, A., 2018.
+    arXiv:1803.02155.
