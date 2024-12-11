@@ -122,7 +122,11 @@ Using the convolutional patch embedding and positional encodings described above
 2. Sinusoidal ViT: Sinusoidal encodings.
 3. Relative ViT: Relative encodings.
 
-For each, we train a model that uses fixed length patch embeddings and another model that uses our convolutional patch embedding. While only the latter will be used to evaluate on larger image sizes, the non-convolutional model serves as a baseline for comparison.
+For each, we train a model that uses standard fixed length patch embeddings (ViT) and our model that uses convolutional patch embedding (ViTRI). While only the latter will be used to evaluate on larger image sizes, the non-convolutional model serves as a baseline for comparison.
+
+
+The training curves for Relative ViTRI are shown below; we see that the model tends to overfit on training data, leading to an increasing gap between training and validation performance. 
+![Relative ViTRI Curves](images/relative_curves.png)
 
 ---
 
