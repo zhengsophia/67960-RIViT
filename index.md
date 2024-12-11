@@ -1,4 +1,4 @@
-# RIViT: Resolution Invariant Vision Transformers 🔩
+# RIViT: Resolution Invariant Vision Transformers 🐸
 
 _6.7960 Final Project_
 
@@ -116,7 +116,7 @@ $R$ is the relative positional encoding matrix, mapping each pair of tokens to a
 
 #### 4.4.1. Models
 
-![RIViT Architecture](images/RIViT.png "Model Architecture")
+![RIViT Architecture](images/RIViT.png)
 
 Using the convolutional patch embedding and positional encodings described above, we train three types of ViTs for comparison.
 
