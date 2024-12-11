@@ -175,6 +175,8 @@ RIViT consistently outperforms vanilla patch embedding results across the board,
 
 We see that both with and without RIViT, relative positional encodings outperform sinusoidal encodings, which outperform learned positional encodings. This aligns with our hypothesis as relative positonal encodings capture superior contextual information, while sinusoidal encodings provide smoother inductive biases. We see for RIViT that sinusoidal encodings lose less overall performance on larger resolutions due to better generalization on unseen data.
 
+## Citations
+
 [citations]: #
 
 [^1]:
