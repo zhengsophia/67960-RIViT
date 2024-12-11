@@ -6768,31 +6768,31 @@
 
 <h2 id="2-related-work">2. Related Work</h2>
 
-<h3 id="21-vit-with-any-resolution">2.1 ViT with Any Resolution</h3>
+<h3 id="21-vit-with-any-resolution">2.1. ViT with Any Resolution</h3>
 
 <p>ViTAR<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>, or ViT with Any Resolution describes a transformer architecture that uses an adaptive token merger to give fixed size token arrays to be fed into a standard transformer, with fuzzy positional encodings. The token merger uses adaptive “GridAttention” based on image resolution, which is a combination of average pooling with CrossAttention.</p>
 
-<h3 id="22-resformer">2.2 Resformer</h3>
+<h3 id="22-resformer">2.2. Resformer</h3>
 
 <p>Resformer<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup> proposes multi-resolution training for ViTs to improve resolution invariance. Our model’s novelty lies in its positional encoding methods as well as its use of adaptive pooling during patch embedding to remain resolution invariant.</p>
 
-<h3 id="23-multi-scale-vision-longformer">2.3 Multi-Scale Vision Longformer</h3>
+<h3 id="23-multi-scale-vision-longformer">2.3. Multi-Scale Vision Longformer</h3>
 
 <p>Multi-Scale Vision Longformer<sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup> details combining a multi-scale model structure and a Vision Longformer, with attention mechanisms adapted from standard Longformers. This stacks more ViT stages to achieve the multi-scale structure of deep CNNs. Our approach of convolution on patch embedding leverages CNN feature extraction to achieve similar benefits, hybridizing advantages of local CNN extraction and global Transformer modeling.</p>
 
 <hr />
 
-<h2 id="4-methodology">4. Methodology</h2>
+<h2 id="4-methodology">3. Methodology</h2>
 
 <p>Our baseline model for comparison will be a vanilla ViT model using learned positional encodings. We will compare the performance of our novel models against the baseline for the task of image classification, using the Imagenette dataset. We will follow ResFormer’s training methodology to perform multi-resolution training.</p>
 
-<h3 id="41-dataset">4.1. Dataset</h3>
+<h3 id="41-dataset">3.1. Dataset</h3>
 
 <p>We train on Imagenette, a subset of ImageNet with 10 distinct classes (tench, English springer, cassette player, chain saw, church, French horn, garbage truck, gas pump, golf ball, parachute). Imagenette consists of ~13,000 images, with a 70/30 train/validation split.</p>
 
 <p>Images from Imagenette are loaded with their shorter dimension set to 320px. For training purposes, images are cropped, resized, and normalized to obtain square images. Following Resformer’s multi-resolution training method, each training image is scaled to three different resolutions: 96px, 128px, and 160px.</p>
 
-<h4 id="411-data-augmentations">4.1.1. Data Augmentations</h4>
+<h4 id="411-data-augmentations">3.1.1. Data Augmentations</h4>
 
 <p>To improve the robustness of our model, we apply a few random data augmentations:</p>
 
@@ -6802,7 +6802,7 @@
   <li>Random color jitter (brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)</li>
 </ol>
 
-<h3 id="42-convolutional-patch-embeddings">4.2. Convolutional Patch Embeddings</h3>
+<h3 id="42-convolutional-patch-embeddings">3.2. Convolutional Patch Embeddings</h3>
 
 <p>To achieve resolution invariance, we use convolution and adaptive pooling layers on patch embedding outputs to reduce tokens to a fixed size.
     \[
@@ -6821,7 +6821,7 @@
 
 <p>We hypothesize that learnable conv2D layers will capture more localized features with average pooling to preserve high-resolution data fed into the base transformer.</p>
 
-<h3 id="43-positional-encodings">4.3. Positional Encodings</h3>
+<h3 id="43-positional-encodings">3.3. Positional Encodings</h3>
 
 <p>Along with the convolutional patch embeddings, we experiment with positional encodings to improve our model’s resolution invariance.</p>
 
@@ -6831,13 +6831,13 @@
 
 <p>In our models, we explore three different options for positional encodings.</p>
 
-<h4 id="431-learned-positional-encodings">4.3.1. Learned Positional Encodings</h4>
+<h4 id="431-learned-positional-encodings">3.3.1. Learned Positional Encodings</h4>
 
 <p>Each position is mapped to a vector of parameters with the same dimension as the token embeddings, and these vectors are added to the token embeddings at each forward pass of the model. This positional encoding matrix is initialized randomly and learned by the model during training.</p>
 
 <p>Learned positional encodings have the advantage of being tailored to the task at hand, but suffer the drawback of only being trained on limited resolution sizes. Hence, they may not be able to generalize effectively to unseen longer resolution sizes.</p>
 
-<h4 id="432-sinusoidal-position-encodings">4.3.2. Sinusoidal Position Encodings</h4>
+<h4 id="432-sinusoidal-position-encodings">3.3.2. Sinusoidal Position Encodings</h4>
 
 <p>Sinusoidal position encodings also add position encoding vectors to the token embeddings, but this vector is calculated based on a fixed sinusoidal function instead of learned during training.</p>
 
@@ -6852,7 +6852,7 @@
 
 <p>This function extends easily to unseen resolution lengths, and requires less memory and computation than learned positional encodings.</p>
 
-<h4 id="433-relative-positional-encodings">4.3.3. Relative Positional Encodings</h4>
+<h4 id="433-relative-positional-encodings">3.3.3. Relative Positional Encodings</h4>
 
 <p>The above two methods are both examples of <em>absolute</em> positional encodings, i.e. they encode information for the position alone. However, <em>relative</em> positional encodings capture pairwise information between different positions.</p>
 
@@ -6868,9 +6868,9 @@
 
 <p>\(R\) is the relative positional encoding matrix, mapping each pair of tokens to a \(dim\)-length vector.</p>
 
-<h3 id="44-training">4.4. Training</h3>
+<h3 id="44-training">3.4. Training</h3>
 
-<h4 id="441-models">4.4.1. Models</h4>
+<h4 id="441-models">3.4.1. Models</h4>
 
 <p><img src="images/RIViT.png" alt="RIViT Architecture" /></p>
 
@@ -6889,9 +6889,9 @@
 
 <hr />
 
-<h2 id="5-results">5. Results</h2>
+<h2 id="5-results">4. Results</h2>
 
-<h3 id="51-impact-of-patch-embeddings">5.1. Impact of Patch Embeddings</h3>
+<h3 id="51-impact-of-patch-embeddings">4.1. Impact of Patch Embeddings</h3>
 
 <table>
   <thead>
@@ -6922,7 +6922,7 @@
 
 <p>When comparing with the vanilla ViT patch embedding, our model augmentation of convolutional patch embedding outperforms across all positional encodings. While there is insignificant difference in the validation accuracy of the learned positional encodings, our model is more computationally efficient. Because of Colab constraints, the vanilla model could only be run with a batch size of 32 at 8 minute epochs. With our convolutional patch embedding, the model ran with a batch size of 64 at 2.5 minute epochs.</p>
 
-<h3 id="52-evaluation-on-larger-resolutions">5.2. Evaluation on Larger Resolutions</h3>
+<h3 id="52-evaluation-on-larger-resolutions">4.2. Evaluation on Larger Resolutions</h3>
 
 <table>
   <thead>
@@ -6959,27 +6959,27 @@
 
 <hr />
 
-<h2 id="6-conclusion">6. Conclusion</h2>
+<h2 id="6-conclusion">5. Conclusion</h2>
 
-<h3 id="61-resolution-invariance">6.1 Resolution Invariance</h3>
+<h3 id="61-resolution-invariance">5.1. Resolution Invariance</h3>
 
 <p>We note that there is some dropoff in accuracy on higher resolutions, but compared to vanilla patch embedded ViTs which cannot run beyond their initial max token length, we see reasonable performance after scaling resolutions.
 <img src="images/latent_images.jpg" alt="Latent Images" />
 In the above figure we show images of the averaged latent spaces of the patch embedder, which shows resolution invariance across the test resolutions 96x96, 128x128, 160x160, and 320x320. As such, we conclude that RIViT captures a CNN’s ability to scale between resolutions while maintaining the benefits of a ViT.</p>
 
-<h3 id="62-compute-costs">6.2 Compute Costs</h3>
+<h3 id="62-compute-costs">5.2. Compute Costs</h3>
 
 <p>While normal ViTs are unable to scale beyond their specified max token length, we are able to train normal ViTs to a max resolution of 160x160, leading to ~1600 max token lengths. RIViT reduces all input resolutions to 256 tokens. Even with the multiple convolution operations of our patch embedder, the total training and inference time is shortened by 64.3%, and memory usage is reduced by 32.8% reduction for identical resolutions.</p>
 
-<h3 id="63-rivit-vs-vanilla-patch-embedding">6.3 RIViT vs Vanilla Patch Embedding</h3>
+<h3 id="63-rivit-vs-vanilla-patch-embedding">5.3. RIViT vs Vanilla Patch Embedding</h3>
 
 <p>RIViT consistently outperforms vanilla patch embedding results across the board, showing that the reduction in compute costs and token length do not cause any downsides in accuracy.</p>
 
-<h3 id="64-positional-encodings">6.4 Positional Encodings</h3>
+<h3 id="64-positional-encodings">5.4. Positional Encodings</h3>
 
 <p>We see that both with and without RIViT, relative positional encodings outperform sinusoidal encodings, which outperform learned positional encodings. This aligns with our hypothesis as relative positonal encodings capture superior contextual information, while sinusoidal encodings provide smoother inductive biases. We see for RIViT that sinusoidal encodings lose less overall performance on larger resolutions due to better generalization on unseen data.</p>
 
-<h3>6.5 Future Work</h3>
+<h3>5.5. Future Work</h3>
 
 <p>In the future, we hope to explore training and testing on larger models as well as larger datasets. Because of Colab, this project was scoped to the Imagenette dataset which is only subset of the full ImageNet dataset. Larger models and datasets will produce more robustness and generalizability. We would also like to test on higher resolutions, such as 512px and 1024px to continue pushing the resolution invariant cabilities of the augmentations.</p>
 
