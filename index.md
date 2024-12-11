@@ -145,7 +145,7 @@ The training curves for Relative ViTRI are shown below; we see that the model te
 | Model              | Val Acc | 256px Acc | 320px Acc |
 | ------------------ | ------- | --------- | --------- |
 | Vanilla ViTRI    | 73.54%  | 69.89%    | 69.73%    |
-| Sinusoidal ViTRI | 78.01%  | 76.17%    | 75.32%    |
+| Sinusoidal ViTRI | 78.01%  | 74.90%    | 73.86%    |
 | Relative ViTRI   | 80.56%  | 76.52%    | 75.82%    |
 
 <!-- Relative CNN: 80.56% on validation- 80 epochs, Sinusoidal CNN: 77.93% on validation, 90 epochs (stock model size with 6 layers, 3 head, 128 neurons) -->
